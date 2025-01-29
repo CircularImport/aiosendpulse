@@ -1,9 +1,11 @@
 [tool.poetry]
 name = "aiosendpulse"
 version = "0.1.0"
-description = ""
-authors = ["artemprotaev <a.protaev@atomgroup.io>"]
+description = "Async SendPulse client for python"
+authors = ["circularimport <circular.import@proton.me"]
 readme = "README.md"
+repository = "https://github.com/CircularImport/aiosendpulse"
+documentation = "https://circularimport.github.io/aiosendpulse/"
 
 [tool.poetry.dependencies]
 python = "^3.9"
