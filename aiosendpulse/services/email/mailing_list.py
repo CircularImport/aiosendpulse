@@ -1,9 +1,10 @@
 from typing import Union
 
-from aiosendpulse.methods.email.mailing import (
+from aiosendpulse.methods.email.mailing_list import (
     AddEmailsToMailingList,
     CreateMailingList,
     EditMailingList,
+    GetEmailsList,
     GetListMailingListVariables,
     GetListOfMailingLists,
     GetMailingList,
@@ -45,4 +46,15 @@ class MailingListService(BaseService):
         return await AddEmailsToMailingList(
             mailing_list_id=mailing_list_id,
             emails=emails,
+        )(client=self.http_client, auth=self.auth)
+
+    async def get_emails(
+        self, mailing_list_id: int, limit: int = None, offset: int = None, active: bool = None, not_active: bool = None
+    ) -> list[EmailDetail]:
+        return await GetEmailsList(
+            id=mailing_list_id,
+            limit=limit,
+            offset=offset,
+            active=active,
+            not_active=not_active,
         )(client=self.http_client, auth=self.auth)
