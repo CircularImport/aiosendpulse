@@ -18,6 +18,12 @@ email-validator = ">=2"
 ruff = "^0.9.3"
 pre-commit = "^4.1.0"
 
+
+[tool.poetry.group.docs.dependencies]
+mkdocs = "^1.6.1"
+mkdocs-material = "^9.5.50"
+mkdocstrings-python = "^1.13.0"
+
 [tool.ruff]
 line-length = 120
 target-version = "py39"
