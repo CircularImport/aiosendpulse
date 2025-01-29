@@ -8,10 +8,13 @@ from aiosendpulse.auth import BearerTokenAuth
 from aiosendpulse.methods import (
     Authorize,
 )
-from aiosendpulse.methods.email.blacklist import AddEmailsToBlacklist, DeleteEmailsFromBlacklist
-from aiosendpulse.methods.email.mailing import AddEmailsToMailingList
 from aiosendpulse.methods.email.templates import CreateTemplate, EditTemplate, GetTemplate
-from aiosendpulse.types import CreateTemplateResult, EmailDetail, Result, Template
+from aiosendpulse.services.email import EmailService
+from aiosendpulse.types import (
+    CreateTemplateResult,
+    Result,
+    Template,
+)
 
 
 __all__ = ["AioSendPulseClient"]
@@ -28,7 +31,7 @@ class AioSendPulseClient:
         grant_type: Literal["client_credentials"] = "client_credentials",
         token: str = None,
     ) -> None:
-        self.client = AsyncClient(base_url=BASE_URL)
+        self.http_client = AsyncClient(base_url=BASE_URL)
         self.auth_class: type[BearerTokenAuth] = BearerTokenAuth
         self.__client_id = client_id
         self.__client_secret = client_secret
@@ -43,6 +46,10 @@ class AioSendPulseClient:
         if self.__auth is not None:
             return self.__auth.token
 
+    @property
+    def auth(self) -> Union[BearerTokenAuth, None]:
+        return self.__auth
+
     async def __aenter__(self) -> AioSendPulseClient:
         if not self.__auth:
             await self.authorize()
@@ -52,7 +59,7 @@ class AioSendPulseClient:
         await self.close()
 
     async def close(self) -> None:
-        await self.client.aclose()
+        await self.http_client.aclose()
 
     async def authorize(self) -> None:
         method = Authorize(
@@ -60,27 +67,14 @@ class AioSendPulseClient:
             client_secret=self.__client_secret,
             grant_type=self.__grant_type,
         )
-        response = await method(client=self.client)
+        response = await method(client=self.http_client)
         self.__auth = self.auth_class(
             token=response.access_token.get_secret_value(),
         )
 
-    # Email service / mailing section
-    async def add_emails_to_mailing_list(self, mailing_list_id: int, emails: list[Union[EmailDetail, dict]]) -> Result:
-        return await AddEmailsToMailingList(
-            mailing_list_id=mailing_list_id,
-            emails=emails,
-        )(client=self.client, auth=self.__auth)
-
-    # Email service /blacklist section
-    async def add_emails_to_blacklist(self, emails: list[str], comment: str = None) -> Result:
-        return await AddEmailsToBlacklist(
-            emails=emails,
-            comment=comment,
-        )(client=self.client, auth=self.__auth)
-
-    async def delete_emails_from_blacklist(self, emails: list[str]) -> Result:
-        return await DeleteEmailsFromBlacklist(emails=emails)(client=self.client, auth=self.__auth)
+    @property
+    def email(self) -> EmailService:
+        return EmailService(client=self)
 
     # Email service / templates section
     async def create_template(self, html: str, lang: str, name: str = None) -> CreateTemplateResult:
@@ -88,15 +82,15 @@ class AioSendPulseClient:
             name=name,
             body=html,
             lang=lang,  # noqa
-        )(client=self.client, auth=self.__auth)
+        )(client=self.http_client, auth=self.auth)
 
     async def edit_template(self, template_id: Union[str, int], html: str) -> Result:
         return await EditTemplate(
             id=template_id,
             body=html,
-        )(client=self.client, auth=self.__auth)
+        )(client=self.http_client, auth=self.auth)
 
     async def get_template(self, template_id: Union[str, int]) -> Template:
         return await GetTemplate(
             template_id=template_id,
-        )(client=self.client, auth=self.__auth)
+        )(client=self.http_client, auth=self.auth)

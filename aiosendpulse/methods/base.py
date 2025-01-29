@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import ClassVar, Generic, TypeVar, Union
+from typing import ClassVar, Generic, TypeVar, Union, get_args, get_origin
 
 from httpx import URL, AsyncClient, Auth, HTTPError, HTTPStatusError, Request
 
@@ -9,7 +9,10 @@ from aiosendpulse.logger import logger
 from aiosendpulse.types.base import SendPulseObject
 
 
-SendPulseType = TypeVar("SendPulseType", bound=SendPulseObject)
+__all__ = ["SendPulseMethod"]
+
+
+SendPulseType = TypeVar("SendPulseType")
 
 
 class SendPulseMethod(SendPulseObject, Generic[SendPulseType]):
@@ -34,6 +37,18 @@ class SendPulseMethod(SendPulseObject, Generic[SendPulseType]):
                 exception = ExceptionDispatcher.get(error_code=data.get("error_code"), **self.model_dump())
                 raise exception
 
+            if get_origin(self.__returning__) is list:
+                args = get_args(self.__returning__)
+
+                if len(args) != 1:
+                    raise ValueError("generic type must be with one inner annotation class")
+
+                args = args[0]
+
+                if issubclass(args, SendPulseObject):
+                    return [args.model_validate(obj=obj) for obj in response.json()]
+
             if issubclass(self.__returning__, SendPulseObject):
                 return self.__returning__.model_validate_json(json_data=response.content)
+
             return response.json()
