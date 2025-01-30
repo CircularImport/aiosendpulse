@@ -5,6 +5,7 @@ from .get_addressbook import GetAddressbook
 from .get_emails_from_addressbook import GetEmailsFromAddressbook
 from .get_list_of_addressbook import GetListOfAddressbook
 from .get_list_of_addressbook_variables import GetListOfAddressbookVariables
+from .get_total_emails import GetTotalEmails
 
 
 __all__ = [
@@ -15,4 +16,5 @@ __all__ = [
     "EditAddressbook",
     "GetAddressbook",
     "GetListOfAddressbookVariables",
+    "GetTotalEmails",
 ]

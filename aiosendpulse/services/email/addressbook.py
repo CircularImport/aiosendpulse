@@ -8,9 +8,10 @@ from aiosendpulse.methods.email.addressbook import (
     GetEmailsFromAddressbook,
     GetListOfAddressbook,
     GetListOfAddressbookVariables,
+    GetTotalEmails,
 )
 from aiosendpulse.services.base import BaseService
-from aiosendpulse.types import Addressbook, AddressbookId, AddressbookVariable, EmailDetail, Result
+from aiosendpulse.types import Addressbook, AddressbookId, AddressbookVariable, EmailDetail, Result, TotalEmails
 
 
 __all__ = ["AddressbookService"]
@@ -58,3 +59,6 @@ class AddressbookService(BaseService):
             active=active,
             not_active=not_active,
         )(client=self.http_client, auth=self.auth)
+
+    async def get_total_emails(self, addressbook_id: int) -> TotalEmails:
+        return await GetTotalEmails(id=addressbook_id)(client=self.http_client, auth=self.auth)

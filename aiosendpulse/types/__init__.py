@@ -7,6 +7,7 @@ from .sender import Sender
 from .template import Template, TemplateMeta
 from .template_category import TemplateCategory
 from .token import Token
+from .total_emails import TotalEmails
 
 
 Template.model_rebuild()
@@ -25,4 +26,5 @@ __all__ = [
     "TemplateMeta",
     "TemplateCategory",
     "Token",
+    "TotalEmails",
 ]
