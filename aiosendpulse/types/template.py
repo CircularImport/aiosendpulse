@@ -13,7 +13,7 @@ if TYPE_CHECKING:
     from .template_category import TemplateCategory
 
 
-__all__ = ["Template"]
+__all__ = ["Template", "TemplateMeta"]
 
 
 class Template(MutableSendPulseObjectObject):
@@ -30,3 +30,8 @@ class Template(MutableSendPulseObjectObject):
     tags: dict[str, str] = {}
     owner: str
     preview: HttpUrl
+
+
+class TemplateMeta(MutableSendPulseObjectObject):
+    id: Union[str, int]
+    variables: dict[str, str]

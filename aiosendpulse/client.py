@@ -8,13 +8,8 @@ from aiosendpulse.auth import BearerTokenAuth
 from aiosendpulse.methods import (
     Authorize,
 )
-from aiosendpulse.methods.email.templates import CreateTemplate, EditTemplate, GetTemplate
 from aiosendpulse.services.email import EmailService
-from aiosendpulse.types import (
-    CreateTemplateResult,
-    Result,
-    Template,
-)
+from aiosendpulse.services.smtp import SmtpService
 
 
 __all__ = ["AioSendPulseClient"]
@@ -76,21 +71,6 @@ class AioSendPulseClient:
     def email(self) -> EmailService:
         return EmailService(client=self)
 
-    # Email service / templates section
-    async def create_template(self, html: str, lang: str, name: str = None) -> CreateTemplateResult:
-        return await CreateTemplate(
-            name=name,
-            body=html,
-            lang=lang,  # noqa
-        )(client=self.http_client, auth=self.auth)
-
-    async def edit_template(self, template_id: Union[str, int], html: str) -> Result:
-        return await EditTemplate(
-            id=template_id,
-            body=html,
-        )(client=self.http_client, auth=self.auth)
-
-    async def get_template(self, template_id: Union[str, int]) -> Template:
-        return await GetTemplate(
-            template_id=template_id,
-        )(client=self.http_client, auth=self.auth)
+    @property
+    def smtp(self) -> SmtpService:
+        return SmtpService(client=self)
