@@ -4,10 +4,10 @@ from aiosendpulse.methods.base import SendPulseMethod
 from aiosendpulse.types import Result
 
 
-__all__ = ["EditMailingList"]
+__all__ = ["EditAddressbook"]
 
 
-class EditMailingList(SendPulseMethod[Result]):
+class EditAddressbook(SendPulseMethod[Result]):
     id: int
     name: str
 

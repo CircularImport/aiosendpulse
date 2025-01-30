@@ -3,14 +3,14 @@ from datetime import datetime
 from .base import MutableSendPulseObjectObject
 
 
-__all__ = ["MailingList", "MailingListId"]
+__all__ = ["Addressbook", "AddressbookId"]
 
 
-class MailingListId(MutableSendPulseObjectObject):
+class AddressbookId(MutableSendPulseObjectObject):
     id: int
 
 
-class MailingList(MailingListId):
+class Addressbook(AddressbookId):
     name: str
     all_email_qty: int
     active_email_qty: int

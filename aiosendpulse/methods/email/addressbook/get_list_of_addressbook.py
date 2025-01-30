@@ -3,19 +3,19 @@ from typing import Union
 from httpx import URL, Request
 
 from aiosendpulse.methods.base import SendPulseMethod
-from aiosendpulse.types import MailingList
+from aiosendpulse.types import Addressbook
 
 
-__all__ = ["GetListOfMailingLists"]
+__all__ = ["GetListOfAddressbook"]
 
 
-class GetListOfMailingLists(SendPulseMethod[list[MailingList]]):
+class GetListOfAddressbook(SendPulseMethod[list[Addressbook]]):
     limit: Union[int, None] = None
     offset: Union[int, None] = None
 
     __http_method__ = "GET"
     __api_endpoint__ = "/addressbooks"
-    __returning__ = list[MailingList]
+    __returning__ = list[Addressbook]
 
     def build_request(self, base_url: URL) -> Request:
         params = {}

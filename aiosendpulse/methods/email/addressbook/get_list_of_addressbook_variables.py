@@ -1,18 +1,18 @@
 from httpx import URL, Request
 
 from aiosendpulse.methods.base import SendPulseMethod
-from aiosendpulse.types import MailingListVariable
+from aiosendpulse.types import AddressbookVariable
 
 
-__all__ = ["GetListMailingListVariables"]
+__all__ = ["GetListOfAddressbookVariables"]
 
 
-class GetListMailingListVariables(SendPulseMethod[list[MailingListVariable]]):
+class GetListOfAddressbookVariables(SendPulseMethod[list[AddressbookVariable]]):
     id: int
 
     __http_method__ = "GET"
     __api_endpoint__ = "/addressbooks/{id}/variables"
-    __returning__ = list[MailingListVariable]
+    __returning__ = list[AddressbookVariable]
 
     def build_request(self, base_url: URL) -> Request:
         return Request(

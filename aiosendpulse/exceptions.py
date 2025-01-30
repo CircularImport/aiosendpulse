@@ -53,8 +53,8 @@ class EmailNotFoundError(ExceptionDispatcher, SendPulseException):
         self.message = "Email not found"
 
 
-class MailingListNotFoundError(ExceptionDispatcher, SendPulseException):
+class AddressbookNotFoundError(ExceptionDispatcher, SendPulseException):
     error_code = 213
 
     def __init__(self) -> None:
-        self.message = "Mailing list {mailing_list_id} not found"
+        self.message = "Addressbook {addressbook_id} not found"

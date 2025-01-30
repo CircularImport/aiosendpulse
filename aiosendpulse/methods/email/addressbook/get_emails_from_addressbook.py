@@ -6,10 +6,10 @@ from aiosendpulse.methods.base import SendPulseMethod
 from aiosendpulse.types import EmailDetail
 
 
-__all__ = ["GetEmailsList"]
+__all__ = ["GetEmailsFromAddressbook"]
 
 
-class GetEmailsList(SendPulseMethod[list[EmailDetail]]):
+class GetEmailsFromAddressbook(SendPulseMethod[list[EmailDetail]]):
     id: int
     limit: Union[int, None] = None
     offset: Union[int, None] = None
