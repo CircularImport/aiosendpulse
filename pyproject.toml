@@ -94,4 +94,3 @@ max-complexity = 3
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
-
