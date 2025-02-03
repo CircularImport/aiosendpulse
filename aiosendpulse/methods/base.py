@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import ClassVar, Generic, TypeVar, Union, get_args, get_origin
+from typing import ClassVar, Generic, Literal, TypeVar, Union, get_args, get_origin
 
 from httpx import URL, AsyncClient, Auth, HTTPError, HTTPStatusError, Request
 
@@ -19,6 +19,10 @@ class SendPulseMethod(SendPulseObject, Generic[SendPulseType]):
     __http_method__: ClassVar[str]
     __api_endpoint__: ClassVar[str]
     __returning__: ClassVar[type]
+    __query_params__: ClassVar[set[str]] = set()
+    __path_params__: ClassVar[set[str]] = set()
+    __body_params__: ClassVar[set[str]] = set()
+    __content_type__: ClassVar[Literal["application/json"]] = "application/json"
 
     def build_request(self, base_url: URL) -> Request:
         raise NotImplementedError()
