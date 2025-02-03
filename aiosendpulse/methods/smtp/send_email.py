@@ -48,6 +48,14 @@ class SendEmail(SendPulseMethod[Result]):
 
         return {k: b64encode(v.encode()).decode() for k, v in v.items()}
 
+    @field_validator("html", mode="after")  # noqa
+    @classmethod
+    def html_validator(cls, v: Union[str, None]) -> Union[str, None]:
+        if v is None:
+            return None
+
+        return b64encode(v.encode()).decode()
+
     def build_request(self, base_url: URL) -> Request:
         return Request(
             method=self.__http_method__,
