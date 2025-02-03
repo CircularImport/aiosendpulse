@@ -9,6 +9,7 @@ from aiosendpulse.methods.email.addressbook import (
     GetListOfAddressbook,
     GetListOfAddressbookVariables,
     GetTotalEmails,
+    SearchEmails,
 )
 from aiosendpulse.services.base import BaseService
 from aiosendpulse.types import Addressbook, AddressbookId, AddressbookVariable, EmailDetail, Result, TotalEmails
@@ -62,3 +63,8 @@ class AddressbookService(BaseService):
 
     async def get_total_emails(self, addressbook_id: int) -> TotalEmails:
         return await GetTotalEmails(id=addressbook_id)(client=self.http_client, auth=self.auth)
+
+    async def search_emails(self, addressbook_id: int, variable_name: str, variable_value: str) -> list[EmailDetail]:
+        return await SearchEmails(id=addressbook_id, variable_name=variable_name, search_value=variable_value)(
+            client=self.http_client, auth=self.auth
+        )
