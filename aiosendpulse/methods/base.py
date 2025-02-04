@@ -1,11 +1,15 @@
 from __future__ import annotations
 
-from typing import Any, ClassVar, Generic, Literal, TypeVar, Union, get_args, get_origin
+from typing import TYPE_CHECKING, Any, ClassVar, Generic, Literal, TypeVar, Union, get_args, get_origin
 
-from httpx import URL, AsyncClient, Request
+from httpx import URL, Request
 from pydantic import BaseModel
 
 from aiosendpulse.types.base import SendPulseObject
+
+
+if TYPE_CHECKING:
+    from aiosendpulse import AioSendPulseClient
 
 
 __all__ = ["SendPulseMethod"]
@@ -42,7 +46,7 @@ class SendPulseMethod(SendPulseObject, Generic[SendPulseType]):
     def __getitem__(self, item: str) -> Any:
         return getattr(self, item)
 
-    async def __call__(self, client: AsyncClient) -> Union[SendPulseType, dict, None]:
+    async def __call__(self, client: AioSendPulseClient) -> Union[SendPulseType, dict, None]:
         response = await client.send(request=self.build_request(base_url=client.base_url))
         decoded_data = response.json()
         if get_origin(self.__returning__) is list:

@@ -11,7 +11,7 @@ class BlacklistService(BaseService):
         return await AddEmailsToBlacklist(
             emails=emails,
             comment=comment,
-        )(client=self.http_client, auth=self.auth)
+        )(client=self.client)
 
     async def delete_emails_from_blacklist(self, emails: list[str]) -> Result:
-        return await DeleteEmailsFromBlacklist(emails=emails)(client=self.http_client, auth=self.auth)
+        return await DeleteEmailsFromBlacklist(emails=emails)(client=self.client)

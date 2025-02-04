@@ -35,4 +35,4 @@ class SmtpService(BaseService):
             bcc=bcc,
             attachments=attachments,
             attachments_binary=attachments_binary,
-        )(client=self.http_client, auth=self.auth)
+        )(client=self.client)

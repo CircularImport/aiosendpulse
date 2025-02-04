@@ -3,7 +3,7 @@ from __future__ import annotations
 from http import HTTPStatus
 from typing import Literal, Union
 
-from httpx import AsyncClient, HTTPError, HTTPStatusError, Request, Response
+from httpx import URL, AsyncClient, HTTPError, HTTPStatusError, Request, Response
 
 from aiosendpulse.auth import BearerTokenAuth
 from aiosendpulse.logger import logger
@@ -36,6 +36,7 @@ class AioSendPulseClient:
         self.__client_secret = client_secret
         self.__grant_type = grant_type
         self.__auth: Union[BearerTokenAuth, None] = None
+        self.base_url = URL(url=BASE_URL)
 
         if token is not None:
             self.__auth = self.auth_class(token=token)
@@ -75,7 +76,7 @@ class AioSendPulseClient:
                 client_secret=self.__client_secret,
                 grant_type=self.__grant_type,
             )
-            response = await method(client=self.http_client)
+            response = await method(client=self)
             token = response.access_token.get_secret_value()
             ex = response.expires_in
 
