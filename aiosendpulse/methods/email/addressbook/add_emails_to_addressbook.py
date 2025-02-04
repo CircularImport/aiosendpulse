@@ -1,5 +1,3 @@
-from httpx import URL, Request
-
 from aiosendpulse.methods.base import SendPulseMethod
 from aiosendpulse.types import EmailDetail, Result
 
@@ -13,11 +11,5 @@ class AddEmailsToAddressbook(SendPulseMethod[Result]):
 
     __http_method__ = "POST"
     __api_endpoint__ = "/addressbooks/{addressbook_id}/emails"
-    __returning__ = dict
-
-    def build_request(self, base_url: URL) -> Request:
-        return Request(
-            method=self.__http_method__,
-            url=base_url.join(url=self.__api_endpoint__.format(addressbook_id=self.addressbook_id)),
-            json=self.model_dump(mode="json", exclude_none=True, exclude_unset=True),
-        )
+    __returning__ = Result
+    __body_fields__ = {"addressbook_id", "emails"}
